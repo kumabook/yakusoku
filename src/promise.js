@@ -159,20 +159,14 @@ Promise.prototype.run = function(executor) {
   var self = this;
   try {
     executor(function(value) {
-      if (self.status === Status.Pending) {
-        self.fulfill(value);
-      }
+      self.fulfill(value);
     }, function(e) {
-      if (self.status === Status.Pending) {
-        self.reject(e);
-      }
+      self.reject(e);
     });
   } catch (e) {
-    if (self.status === Status.Pending) {
-      self.reject(e);
-    }
+    self.reject(e);
   }
 };
 
+Promise.Status        = Status;
 module.exports        = Promise;
-module.exports.Status = Status;
