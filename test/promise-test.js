@@ -7,9 +7,9 @@ describe('Promise', function() {
     context('when fulfilled synchronously', function() {
       it('should call fulfilled callback', function(done) {
         new Promise(function(resolve, reject) {
-          resolve('result');
+          resolve('value');
         }).then(function(value) {
-          assert.equal('result', value);
+          assert.equal('value', value);
           done();
         }, function(e) {
           assert.fail();
@@ -18,11 +18,11 @@ describe('Promise', function() {
 
       it('should be ok with no fulfilled callback', function(done) {
         var promise = new Promise(function(resolve, reject) {
-          resolve('result');
+          resolve('value');
         }).then(null, function(e) {
           assert.fail();
         }).then(function(value) {
-          assert.equal('result', value);
+          assert.equal('value', value);
           done();
         }, function() {
           assert.fail();
@@ -33,11 +33,11 @@ describe('Promise', function() {
     context('when rejected', function() {
       it('should add rejected callback', function(done) {
         new Promise(function(resolve, reject) {
-          reject(new Error('error'));
+          reject('reason');
         }).then(function(value) {
           assert.fail();
-        }, function(e) {
-          assert.equal('error', e.message);
+        }, function(reason) {
+          assert.equal('reason', reason);
           done();
         });
       });
@@ -47,10 +47,10 @@ describe('Promise', function() {
       it('should call fulfilled callback ', function(done) {
         new Promise(function(resolve, reject) {
           setTimeout(function() {
-            resolve('result');
+            resolve('value');
           }, 100);
         }).then(function(value) {
-          assert.equal('result', value);
+          assert.equal('value', value);
           done();
         }, function(e) {
           assert.fail();
@@ -62,7 +62,7 @@ describe('Promise', function() {
       it('should be chained with promise ', function(done) {
         new Promise(function(resolve, reject) {
           setTimeout(function() {
-            resolve('result');
+            resolve('value');
           }, 100);
         }).then(function(value) {
           return new Promise(function(resolve, reject) {
@@ -71,7 +71,7 @@ describe('Promise', function() {
             }, 100);
           });
         }).then(function(value) {
-          assert.equal('result chained', value);
+          assert.equal('value chained', value);
           done();
         }, function(e) {
           assert.fail();
@@ -80,17 +80,17 @@ describe('Promise', function() {
 
       it('should call rejected callback ', function(done) {
         new Promise(function(resolve, reject) {
-          resolve('result');
+          resolve('value');
         }).then(function(value) {
           return new Promise(function(resolve, reject) {
             setTimeout(function() {
-              reject(new Error('chained error'));
+              reject('chained reason');
             }, 100);
           });
         }).then(function() {
           assert.fail();
-        }, function(e) {
-          assert.equal(e.message, 'chained error');
+        }, function(reason) {
+          assert.equal(reason, 'chained reason');
           done();
         });
       });
@@ -100,16 +100,16 @@ describe('Promise', function() {
   describe('#catch', function() {
     it('should add rejected callback', function(done) {
       new Promise(function(resolve, reject) {
-        reject(new Error('error'));
-      }).catch(function(e) {
-        assert.equal('error', e.message);
+        reject('reason');
+      }).catch(function(reason) {
+        assert.equal('reason', reason);
         done();
       });
     });
 
     it('should recover from rejection', function(done) {
       new Promise(function(resolve, reject) {
-        reject(new Error('error'));
+        reject('reason');
       }).catch(function(e) {
         return 'recovered';
       }).then(function(value) {
@@ -120,7 +120,7 @@ describe('Promise', function() {
 
     it('should catch throwed exception', function(done) {
       new Promise(function(resolve, reject) {
-        resolve('result');
+        resolve('value');
       }).then(function(e) {
         throw new Error('throwed');
       }).catch(function(e) {
@@ -142,7 +142,7 @@ describe('Promise', function() {
 
     it('should catch throwed exception in fulfilled callback', function(done) {
       new Promise(function(resolve, reject) {
-        resolve('result');
+        resolve('value');
       }).then(function(e) {
         throw new Error('second throwed');
       }, function() {
@@ -169,7 +169,7 @@ describe('Promise', function() {
 
   describe('.resolve', function(done) {
     it('should return promise that resolves immediately', function() {
-      Promise.resolve('result').then(function() {
+      Promise.resolve('value').then(function() {
         done();
       });
     });
