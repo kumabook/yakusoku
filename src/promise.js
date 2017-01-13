@@ -12,6 +12,18 @@ var Promise = function(executor) {
   this.run(executor);
 };
 
+Promise.resolve = function(result) {
+  return new Promise(function(resolve) {
+    resolve(result);
+  });
+};
+
+Promise.reject = function(e) {
+  return new Promise(function(resolve, reject) {
+    reject(e);
+  });
+};
+
 Promise.prototype.then = function(onFulfilled, onRejected) {
   var self = this;
   return new Promise(function(resolve, reject) {
