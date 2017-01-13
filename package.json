@@ -4,12 +4,14 @@
   "description": "Super simple promise implementation that works in es3",
   "main": "index.js",
   "scripts": {
-    "test": "nyc --reporter=lcov --reporter=text --reporter=text-summary mocha"
+    "test": "nyc --reporter=lcov --reporter=text --reporter=text-summary mocha",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": "https://github.com/kumabook/yakusoku",
   "author": "Hiroki Kumamoto <kumabook@live.jp>",
   "license": "MIT",
   "devDependencies": {
+    "coveralls": "^2.11.15",
     "mocha": "^3.2.0",
     "nyc": "^10.0.0"
   }
