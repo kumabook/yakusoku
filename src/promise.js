@@ -26,6 +26,63 @@ Promise.reject = function(e) {
   });
 };
 
+Promise.all = function(promises) {
+  return new Promise(function(resolve, reject) {
+    var l = promises.length;
+    var settled = false;
+    var count = 0;
+    var values = new Array(l); // index -> resolved value
+    var onFulfilled = function(value, index) {
+      if (settled) {
+        return;
+      }
+      count++;
+      values[index] = value;
+      if (count >= l) {
+        settled = true;
+        resolve(values);
+      }
+    };
+    var onRejected = function(reason) {
+      if (settled) {
+        return;
+      }
+      settled = true;
+      reject(reason);
+    };
+    for (var i = 0; i < l; i++) {
+      promises[i].then(function(index) {
+        return function(value) {
+          onFulfilled(value, index);
+        };
+      }(i), onRejected);
+    }
+  });
+};
+
+Promise.race = function(promises) {
+  return new Promise(function(resolve, reject) {
+    var l = promises.length;
+    var settled = false;
+    var onSettled = function(value, callback) {
+      if (settled) {
+        return;
+      }
+      settled = true;
+      callback(value);
+    };
+    var onFulfilled = function(value) {
+      onSettled(value, resolve);
+    };
+    var onRejected = function(reason) {
+      onSettled(reason, reject);
+    };
+    for (var i = 0; i < l; i++) {
+      promises[i].then(onFulfilled, onRejected);
+    }
+  });
+};
+
 Promise.prototype.then = function(onFulfilled, onRejected) {
   var self = this;
   return new Promise(function(resolve, reject) {
