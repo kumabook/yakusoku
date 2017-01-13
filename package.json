@@ -1,0 +1,16 @@
+{
+  "name": "yakusoku",
+  "version": "0.0.1",
+  "description": "Super simple promise implementation that works in es3",
+  "main": "index.js",
+  "scripts": {
+    "test": "nyc --reporter=lcov mocha"
+  },
+  "repository": "https://github.com/kumabook/yakusoku",
+  "author": "Hiroki Kumamoto <kumabook@live.jp>",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^3.2.0",
+    "nyc": "^10.0.0"
+  }
+}
