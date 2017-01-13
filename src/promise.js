@@ -14,9 +14,9 @@ var Promise = function(executor) {
 
 Promise.length = 1;
 
-Promise.resolve = function(result) {
+Promise.resolve = function(value) {
   return new Promise(function(resolve) {
-    resolve(result);
+    resolve(value);
   });
 };
 
@@ -30,14 +30,14 @@ Promise.prototype.then = function(onFulfilled, onRejected) {
   var self = this;
   return new Promise(function(resolve, reject) {
     setTimeout(function() {
-      self.enqueueHandler(function(result) {
+      self.enqueueHandler(function(value) {
         try {
-          if (result instanceof Promise) {
-            return resolve(result.then(onFulfilled, onRejected));
+          if (value instanceof Promise) {
+            return resolve(value.then(onFulfilled, onRejected));
           } else if (!onFulfilled) {
-            return resolve(result);
+            return resolve(value);
           } else {
-            return resolve(onFulfilled(result));
+            return resolve(onFulfilled(value));
           }
         } catch (ex) {
           return reject(ex);
@@ -77,20 +77,20 @@ Promise.prototype.catch = function(onRejected) {
   return this.then(null, onRejected);
 };
 
-Promise.prototype.fulfill = function(result) {
+Promise.prototype.fulfill = function(value) {
   var self    = this;
   this.status = Status.Fulfilled;
-  this.value  = result;
+  this.value  = value;
   this.handlers.forEach(function(handler) {
     handler.onFulfilled(self.value);
   });
   this.handlers = null;
 };
 
-Promise.prototype.reject = function(error) {
+Promise.prototype.reject = function(reason) {
   var self    = this;
   this.status = Status.Rejected;
-  this.value  = error;
+  this.value  = reason;
 
   this.handlers.forEach(function(handler) {
     handler.onRejected(self.value);
