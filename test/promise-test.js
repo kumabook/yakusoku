@@ -1,5 +1,6 @@
-var assert  = require('assert');
-var Promise = require('../');
+var assert     = require('assert');
+var Promise    = require('../');
+var TestHelper = require('./test-helper');
 
 describe('Promise', function() {
   describe('#then', function() {
@@ -180,6 +181,96 @@ describe('Promise', function() {
         assert.equal('error', e.message);
         done();
       });
+    });
+  });
+
+  describe('.all', function() {
+    it('should return a promise that fulfills when all of the promises have fulfilled', function(done) {
+      var finished = false;
+      var promises = [
+        TestHelper.resolveAfter('value0',   0),
+        TestHelper.resolveAfter('value1',  10),
+        TestHelper.resolveAfter('value2',  20),
+        TestHelper.resolveAfter('value3',  50),
+        TestHelper.resolveAfter('value4', 100),
+      ];
+      Promise.all(promises).then(function(values) {
+        assert.equal(       5, values.length);
+        assert.equal('value0', values[0]    );
+        assert.equal('value1', values[1]    );
+        assert.equal('value2', values[2]    );
+        assert.equal('value3', values[3]    );
+        assert.equal('value4', values[4]    );
+        finished = true;
+      }, function() {
+        assert.fail();
+      });
+      setTimeout(function() {
+        assert(finished);
+        done();
+      }, 120);
+    });
+
+    it('should return a promise that rejects as soon as one of the promises rejects', function(done) {
+      var finished = false;
+      var promises = [
+        TestHelper.resolveAfter('value0',   0),
+        TestHelper.rejectAfter('reason1',  10),
+        TestHelper.resolveAfter('value2',  20),
+        TestHelper.resolveAfter('value3',  50),
+        TestHelper.rejectAfter('reason4', 100),
+      ];
+      Promise.all(promises).then(function(values) {
+        assert.fail();
+      }, function(reason) {
+        assert.equal('reason1', reason);
+        finished = true;
+      });
+      setTimeout(function() {
+        assert(finished);
+        done();
+      }, 120);
+    });
+  });
+
+  describe('.race', function() {
+    it('should return a promise that fulfills as soon as one of the promises fulfills', function(done) {
+      var finished = false;
+      var promises = [
+        TestHelper.resolveAfter('value0',   0),
+        TestHelper.resolveAfter('value1',  10),
+        TestHelper.rejectAfter('reason2',  20),
+      ];
+      Promise.race(promises).then(function(value) {
+        assert.equal('value0', value);
+        finished = true;
+      }, function() {
+        assert.fail();
+      });
+      setTimeout(function() {
+        assert(finished);
+        done();
+      }, 30);
+    });
+
+    it('should return a promise that rejects as soon as one of the promises rejects', function(done) {
+      var finished = false;
+      var promises = [
+        TestHelper.rejectAfter('reason0',   0),
+        TestHelper.resolveAfter('value1',  10),
+        TestHelper.rejectAfter('reason0',  20),
+      ];
+      Promise.race(promises).then(function() {
+        assert.fail();
+      }, function(reason) {
+        assert.equal('reason0', reason);
+        finished = true;
+        done();
+      });
+      setTimeout(function() {
+        assert(finished);
+        done();
+      }, 30);
     });
   });
 });
