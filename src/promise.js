@@ -130,9 +130,11 @@ Promise.prototype.enqueueHandler = function(onFulfilled, onRejected) {
   }
 };
 
-Promise.prototype.catch = function(onRejected) {
+Promise.prototype['catch'] = function(onRejected) {
   return this.then(null, onRejected);
 };
+
+Promise.prototype.rescue = Promise.prototype['catch'];
 
 Promise.prototype.fulfill = function(value) {
   var self    = this;
