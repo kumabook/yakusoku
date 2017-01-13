@@ -12,6 +12,8 @@ var Promise = function(executor) {
   this.run(executor);
 };
 
+Promise.length = 1;
+
 Promise.resolve = function(result) {
   return new Promise(function(resolve) {
     resolve(result);
