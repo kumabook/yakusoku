@@ -2,7 +2,7 @@ var assert  = require('assert');
 var Promise = require('../');
 
 describe('Promise', function() {
-  describe('.then', function() {
+  describe('#then', function() {
     context('when fulfilled synchronously', function() {
       it('should call fulfilled callback', function(done) {
         new Promise(function(resolve, reject) {
@@ -96,7 +96,7 @@ describe('Promise', function() {
     });
   });
 
-  describe('.catch', function() {
+  describe('#catch', function() {
     it('should add rejected callback', function(done) {
       new Promise(function(resolve, reject) {
         reject(new Error('error'));
@@ -161,6 +161,23 @@ describe('Promise', function() {
         throw new Error('second throwed');
       }).catch(function(e) {
         assert.equal(e.message, 'second throwed');
+        done();
+      });
+    });
+  });
+
+  describe('.resolve', function(done) {
+    it('should return promise that resolves immediately', function() {
+      Promise.resolve('result').then(function() {
+        done();
+      });
+    });
+  });
+
+  describe('.reject', function() {
+    it('should return promise that rejects immediately', function(done) {
+      Promise.reject(new Error('error')).catch(function(e) {
+        assert.equal('error', e.message);
         done();
       });
     });
