@@ -1,6 +1,6 @@
 # yakusoku
 
-[![Build Status](https://travis-ci.org/kumabook/yakusoku.svg?branch=master)](https://travis-ci.org/kumabook/yakusoku) [![Coverage Status](https://coveralls.io/repos/github/kumabook/yakusoku/badge.svg?branch=master)](https://coveralls.io/github/kumabook/yakusoku?branch=master)
+[![Build Status](https://travis-ci.org/kumabook/yakusoku.svg?branch=master)](https://travis-ci.org/kumabook/yakusoku) [![Coverage Status](https://coveralls.io/repos/github/kumabook/yakusoku/badge.svg?branch=master)](https://coveralls.io/github/kumabook/yakusoku?branch=master) [![Code Climate](https://codeclimate.com/github/kumabook/yakusoku/badges/gpa.svg)](https://codeclimate.com/github/kumabook/yakusoku)
 
 Yakusoku is a simple promise library.
 
