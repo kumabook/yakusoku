@@ -6,20 +6,20 @@ describe('Promise', function() {
   describe('#then', function() {
     context('when fulfilled synchronously', function() {
       it('should call fulfilled callback', function(done) {
-        new Promise(function(resolve, reject) {
+        new Promise(function(resolve) {
           resolve('value');
         }).then(function(value) {
           assert.equal('value', value);
           done();
-        }, function(e) {
+        }, function() {
           assert.fail();
         });
       });
 
       it('should be ok with no fulfilled callback', function(done) {
-        var promise = new Promise(function(resolve, reject) {
+        new Promise(function(resolve) {
           resolve('value');
-        }).then(null, function(e) {
+        }).then(null, function() {
           assert.fail();
         }).then(function(value) {
           assert.equal('value', value);
@@ -34,7 +34,7 @@ describe('Promise', function() {
       it('should add rejected callback', function(done) {
         new Promise(function(resolve, reject) {
           reject('reason');
-        }).then(function(value) {
+        }).then(function() {
           assert.fail();
         }, function(reason) {
           assert.equal('reason', reason);
@@ -45,14 +45,14 @@ describe('Promise', function() {
 
     context('when fulfilled asynchronously', function() {
       it('should call fulfilled callback ', function(done) {
-        new Promise(function(resolve, reject) {
+        new Promise(function(resolve) {
           setTimeout(function() {
             resolve('value');
           }, 100);
         }).then(function(value) {
           assert.equal('value', value);
           done();
-        }, function(e) {
+        }, function() {
           assert.fail();
         });
       });
@@ -60,12 +60,12 @@ describe('Promise', function() {
 
     context('chained', function() {
       it('should be chained with promise ', function(done) {
-        new Promise(function(resolve, reject) {
+        new Promise(function(resolve) {
           setTimeout(function() {
             resolve('value');
           }, 100);
         }).then(function(value) {
-          return new Promise(function(resolve, reject) {
+          return new Promise(function(resolve) {
             setTimeout(function() {
               resolve(value + ' chained');
             }, 100);
@@ -73,15 +73,15 @@ describe('Promise', function() {
         }).then(function(value) {
           assert.equal('value chained', value);
           done();
-        }, function(e) {
+        }, function() {
           assert.fail();
         });
       });
 
       it('should call rejected callback ', function(done) {
-        new Promise(function(resolve, reject) {
+        new Promise(function(resolve) {
           resolve('value');
-        }).then(function(value) {
+        }).then(function() {
           return new Promise(function(resolve, reject) {
             setTimeout(function() {
               reject('chained reason');
@@ -110,7 +110,7 @@ describe('Promise', function() {
     it('should recover from rejection', function(done) {
       new Promise(function(resolve, reject) {
         reject('reason');
-      }).catch(function(e) {
+      }).catch(function() {
         return 'recovered';
       }).then(function(value) {
         assert.equal(value, 'recovered');
@@ -119,9 +119,9 @@ describe('Promise', function() {
     });
 
     it('should catch throwed exception', function(done) {
-      new Promise(function(resolve, reject) {
+      new Promise(function(resolve) {
         resolve('value');
-      }).then(function(e) {
+      }).then(function() {
         throw new Error('throwed');
       }).catch(function(e) {
         assert.equal(e.message, 'throwed');
@@ -130,9 +130,9 @@ describe('Promise', function() {
     });
 
     it('should catch throwed exception in executor', function(done) {
-      new Promise(function(resolve, reject) {
+      new Promise(function() {
         throw new Error('first throwed');
-      }).then(function(e) {
+      }).then(function() {
         assert.fail();
       }).catch(function(e) {
         assert.equal(e.message, 'first throwed');
@@ -141,9 +141,9 @@ describe('Promise', function() {
     });
 
     it('should catch throwed exception in fulfilled callback', function(done) {
-      new Promise(function(resolve, reject) {
+      new Promise(function(resolve) {
         resolve('value');
-      }).then(function(e) {
+      }).then(function() {
         throw new Error('second throwed');
       }, function() {
         assert.fail();
@@ -154,9 +154,9 @@ describe('Promise', function() {
     });
 
     it('should catch throwed exception in rejected callback', function(done) {
-      new Promise(function(resolve, reject) {
+      new Promise(function() {
         throw new Error('first throwed');
-      }).then(function(e) {
+      }).then(function() {
         assert.fail();
       }, function() {
         throw new Error('second throwed');
@@ -195,12 +195,12 @@ describe('Promise', function() {
         TestHelper.resolveAfter('value4', 100),
       ];
       Promise.all(promises).then(function(values) {
-        assert.equal(       5, values.length);
-        assert.equal('value0', values[0]    );
-        assert.equal('value1', values[1]    );
-        assert.equal('value2', values[2]    );
-        assert.equal('value3', values[3]    );
-        assert.equal('value4', values[4]    );
+        assert.equal(5,        values.length);
+        assert.equal('value0', values[0]);
+        assert.equal('value1', values[1]);
+        assert.equal('value2', values[2]);
+        assert.equal('value3', values[3]);
+        assert.equal('value4', values[4]);
         finished = true;
       }, function() {
         assert.fail();
@@ -220,7 +220,7 @@ describe('Promise', function() {
         TestHelper.resolveAfter('value3',  50),
         TestHelper.rejectAfter('reason4', 100),
       ];
-      Promise.all(promises).then(function(values) {
+      Promise.all(promises).then(function() {
         assert.fail();
       }, function(reason) {
         assert.equal('reason1', reason);

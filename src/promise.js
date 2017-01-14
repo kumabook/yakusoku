@@ -105,9 +105,9 @@ Promise.prototype.then = function(onFulfilled, onRejected) {
           return;
         }
         try {
-          return resolve(onRejected(e));
+          resolve(onRejected(e));
         } catch (error) {
-          return reject(error);
+          reject(error);
         }
       });
     }, 0);
