@@ -9,7 +9,7 @@ describe('Promise', function() {
         new Promise(function(resolve) {
           resolve('value');
         }).then(function(value) {
-          assert.equal('value', value);
+          assert.equal(value, 'value');
           done();
         }, function() {
           assert.fail();
@@ -22,7 +22,7 @@ describe('Promise', function() {
         }).then(null, function() {
           assert.fail();
         }).then(function(value) {
-          assert.equal('value', value);
+          assert.equal(value, 'value');
           done();
         }, function() {
           assert.fail();
@@ -37,7 +37,7 @@ describe('Promise', function() {
         }).then(function() {
           assert.fail();
         }, function(reason) {
-          assert.equal('reason', reason);
+          assert.equal(reason, 'reason');
           done();
         });
       });
@@ -50,7 +50,7 @@ describe('Promise', function() {
             resolve('value');
           }, 100);
         }).then(function(value) {
-          assert.equal('value', value);
+          assert.equal(value, 'value');
           done();
         }, function() {
           assert.fail();
@@ -71,7 +71,7 @@ describe('Promise', function() {
             }, 100);
           });
         }).then(function(value) {
-          assert.equal('value chained', value);
+          assert.equal(value, 'value chained');
           done();
         }, function() {
           assert.fail();
@@ -90,7 +90,7 @@ describe('Promise', function() {
         }).then(function() {
           assert.fail();
         }, function(reason) {
-          assert.equal(reason, 'chained reason');
+          assert.equal('chained reason', reason);
           done();
         });
       });
@@ -102,7 +102,7 @@ describe('Promise', function() {
       new Promise(function(resolve, reject) {
         reject('reason');
       }).catch(function(reason) {
-        assert.equal('reason', reason);
+        assert.equal(reason, 'reason');
         done();
       });
     });
@@ -113,7 +113,7 @@ describe('Promise', function() {
       }).catch(function() {
         return 'recovered';
       }).then(function(value) {
-        assert.equal(value, 'recovered');
+        assert.equal('recovered', value);
         done();
       });
     });
@@ -124,7 +124,7 @@ describe('Promise', function() {
       }).then(function() {
         throw new Error('throwed');
       }).catch(function(e) {
-        assert.equal(e.message, 'throwed');
+        assert.equal('throwed', e.message);
         done();
       });
     });
@@ -135,7 +135,7 @@ describe('Promise', function() {
       }).then(function() {
         assert.fail();
       }).catch(function(e) {
-        assert.equal(e.message, 'first throwed');
+        assert.equal('first throwed', e.message);
         done();
       });
     });
@@ -148,7 +148,7 @@ describe('Promise', function() {
       }, function() {
         assert.fail();
       }).catch(function(e) {
-        assert.equal(e.message, 'second throwed');
+        assert.equal('second throwed', e.message);
         done();
       });
     });
@@ -161,7 +161,7 @@ describe('Promise', function() {
       }, function() {
         throw new Error('second throwed');
       }).catch(function(e) {
-        assert.equal(e.message, 'second throwed');
+        assert.equal('second throwed', e.message);
         done();
       });
     });
@@ -178,7 +178,7 @@ describe('Promise', function() {
   describe('.reject', function() {
     it('should return promise that rejects immediately', function(done) {
       Promise.reject(new Error('error')).catch(function(e) {
-        assert.equal('error', e.message);
+        assert.equal(e.message, 'error');
         done();
       });
     });
@@ -195,12 +195,12 @@ describe('Promise', function() {
         TestHelper.resolveAfter('value4', 100),
       ];
       Promise.all(promises).then(function(values) {
-        assert.equal(5,        values.length);
-        assert.equal('value0', values[0]);
-        assert.equal('value1', values[1]);
-        assert.equal('value2', values[2]);
-        assert.equal('value3', values[3]);
-        assert.equal('value4', values[4]);
+        assert.equal(values.length, 5);
+        assert.equal(values[0]    , 'value0');
+        assert.equal(values[1]    , 'value1');
+        assert.equal(values[2]    , 'value2');
+        assert.equal(values[3]    , 'value3');
+        assert.equal(values[4]    , 'value4');
         finished = true;
       }, function() {
         assert.fail();
@@ -223,7 +223,7 @@ describe('Promise', function() {
       Promise.all(promises).then(function() {
         assert.fail();
       }, function(reason) {
-        assert.equal('reason1', reason);
+        assert.equal(reason, 'reason1');
         finished = true;
       });
       setTimeout(function() {
@@ -242,7 +242,7 @@ describe('Promise', function() {
         TestHelper.rejectAfter('reason2',  20),
       ];
       Promise.race(promises).then(function(value) {
-        assert.equal('value0', value);
+        assert.equal(value, 'value0');
         finished = true;
       }, function() {
         assert.fail();
@@ -263,7 +263,7 @@ describe('Promise', function() {
       Promise.race(promises).then(function() {
         assert.fail();
       }, function(reason) {
-        assert.equal('reason0', reason);
+        assert.equal(reason, 'reason0');
         finished = true;
         done();
       });
