@@ -301,7 +301,6 @@ describe('Promise', function() {
       }, function(reason) {
         assert.equal(reason, 'reason0');
         finished = true;
-        done();
       });
       setTimeout(function() {
         assert(finished);
