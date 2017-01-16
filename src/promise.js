@@ -1,11 +1,11 @@
 var Status = {
-  Pending:   0,
-  Fulfilled: 1,
-  Rejected:  2
+  PENDING:   0,
+  FULFILLED: 1,
+  REJECTED:  2
 };
 
 var Promise = function(executor) {
-  this.status   = Status.Pending;
+  this.status   = Status.PENDING;
   this.value    = null;
   this.handlers = [];
 
@@ -115,16 +115,16 @@ Promise.prototype.then = function(onFulfilled, onRejected) {
 };
 
 Promise.prototype.enqueueHandler = function(onFulfilled, onRejected) {
-  if (this.status === Status.Pending) {
+  if (this.status === Status.PENDING) {
     this.handlers.push({
       onFulfilled: onFulfilled,
       onRejected:  onRejected
     });
   } else {
-    if (this.status === Status.Fulfilled) {
+    if (this.status === Status.FULFILLED) {
       onFulfilled(this.value);
     }
-    if (this.status === Status.Rejected) {
+    if (this.status === Status.REJECTED) {
       onRejected(this.value);
     }
   }
@@ -138,7 +138,7 @@ Promise.prototype.rescue = Promise.prototype['catch'];
 
 Promise.prototype.fulfill = function(value) {
   var self    = this;
-  this.status = Status.Fulfilled;
+  this.status = Status.FULFILLED;
   this.value  = value;
   this.handlers.forEach(function(handler) {
     handler.onFulfilled(self.value);
@@ -148,7 +148,7 @@ Promise.prototype.fulfill = function(value) {
 
 Promise.prototype.reject = function(reason) {
   var self    = this;
-  this.status = Status.Rejected;
+  this.status = Status.REJECTED;
   this.value  = reason;
 
   this.handlers.forEach(function(handler) {
