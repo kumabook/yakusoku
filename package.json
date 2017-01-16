@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "nyc --reporter=lcov --reporter=text --reporter=text-summary mocha",
+    "mocha": "mocha",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint ./**/*.js"
   },
