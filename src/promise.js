@@ -143,7 +143,7 @@ Promise.prototype.fulfill = function(value) {
   this.handlers.forEach(function(handler) {
     handler.onFulfilled(self.value);
   });
-  this.handlers = null;
+  this.handlers = [];
 };
 
 Promise.prototype.reject = function(reason) {
@@ -154,7 +154,7 @@ Promise.prototype.reject = function(reason) {
   this.handlers.forEach(function(handler) {
     handler.onRejected(self.value);
   });
-  this.handlers = null;
+  this.handlers = [];
 };
 
 Promise.prototype.run = function(executor) {

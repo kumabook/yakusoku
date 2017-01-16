@@ -28,6 +28,24 @@ describe('Promise', function() {
           assert.fail();
         });
       });
+
+      it('should call fulfilled callback only one time', function(done) {
+        var count = 0;
+        new Promise(function(resolve, reject) {
+          resolve('value1');
+          resolve('value2');
+          reject('reason');
+        }).then(function(value) {
+          count += 1;
+          assert.equal(value, 'value1');
+          assert.equal(count, 1);
+        }, function() {
+          assert.fail();
+        });
+        setTimeout(function() {
+          done();
+        }, 100);
+      });
     });
 
     context('when rejected', function() {
@@ -40,6 +58,24 @@ describe('Promise', function() {
           assert.equal(reason, 'reason');
           done();
         });
+      });
+
+      it('should call rejected callback only one time', function(done) {
+        var count = 0;
+        new Promise(function(resolve, reject) {
+          reject('reason1');
+          reject('reason2');
+          resolve('value');
+        }).then(function() {
+          assert.fail();
+        }, function(reason) {
+          count += 1;
+          assert.equal(reason, 'reason1');
+          assert.equal(count, 1);
+        });
+        setTimeout(function() {
+          done();
+        }, 100);
       });
     });
 
