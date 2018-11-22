@@ -26,9 +26,21 @@ Promise.reject = function(e) {
   });
 };
 
-Promise.all = function(promises) {
+Promise.all = function(values) {
+  var promises = [];
+  values.forEach(function(value) {
+    if (value instanceof Promise) {
+      promises.push(value);
+    } else {
+      promises.push(Promise.resolve(value));
+    }
+  });
   return new Promise(function(resolve, reject) {
     var l = promises.length;
+    if (l === 0) {
+      resolve();
+      return [];
+    }
     var settled = false;
     var count = 0;
     var values = new Array(l); // index -> resolved value
@@ -60,9 +72,21 @@ Promise.all = function(promises) {
   });
 };
 
-Promise.race = function(promises) {
+Promise.race = function(values) {
+  var promises = [];
+  values.forEach(function(value) {
+    if (value instanceof Promise) {
+      promises.push(value);
+    } else {
+      promises.push(Promise.resolve(value));
+    }
+  });
   return new Promise(function(resolve, reject) {
     var l = promises.length;
+    if (l === 0) {
+      resolve();
+      return [];
+    }
     var settled = false;
     var onSettled = function(value, callback) {
       if (settled) {

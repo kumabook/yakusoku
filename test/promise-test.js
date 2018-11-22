@@ -267,6 +267,33 @@ describe('Promise', function() {
         done();
       }, 120);
     });
+
+    it('should return a fulfilled promise with empty', function(done) {
+      var finished = false;
+      Promise.all([]).then(function() {
+        finished = true;
+      }, function(reason) {
+        assert.fail();
+      });
+      setTimeout(function() {
+        assert(finished);
+        done();
+      }, 120);
+    });
+
+    it('should return a promise that resolve with the value with non-promise-value', function(done) {
+      var finished = false;
+      Promise.all([1]).then(function(values) {
+        assert.equal(values[0], 1);
+        finished = true;
+      }, function(reason) {
+        assert.fail();
+      });
+      setTimeout(function() {
+        assert(finished);
+        done();
+      }, 120);
+    });
   });
 
   describe('.race', function() {
@@ -307,5 +334,33 @@ describe('Promise', function() {
         done();
       }, 30);
     });
+
+    it('should return a fulfilled promise with empty', function(done) {
+      var finished = false;
+      Promise.race([]).then(function() {
+        finished = true;
+      }, function(reason) {
+        assert.fail();
+      });
+      setTimeout(function() {
+        assert(finished);
+        done();
+      }, 120);
+    });
+
+    it('should return a promise that resolve with the value with non-promise-value', function(done) {
+      var finished = false;
+      Promise.race([1]).then(function(value) {
+        assert.equal(value, 1);
+        finished = true;
+      }, function(reason) {
+        assert.fail();
+      });
+      setTimeout(function() {
+        assert(finished);
+        done();
+      }, 120);
+    });
+
   });
 });
