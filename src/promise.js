@@ -170,5 +170,5 @@ Promise.prototype.run = function(executor) {
   }
 };
 
-Promise.Status        = Status;
-module.exports        = Promise;
+Promise.Status = Status;
+module.exports = Promise;
