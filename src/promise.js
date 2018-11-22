@@ -87,7 +87,7 @@ Promise.prototype.then = function(onFulfilled, onRejected) {
   var self = this;
   return new Promise(function(resolve, reject) {
     setTimeout(function() {
-      self.enqueueHandler(function(value) {
+      self.enqueueOrExecuteHandler(function(value) {
         try {
           if (value instanceof Promise) {
             return resolve(value.then(onFulfilled, onRejected));
@@ -114,7 +114,7 @@ Promise.prototype.then = function(onFulfilled, onRejected) {
   });
 };
 
-Promise.prototype.enqueueHandler = function(onFulfilled, onRejected) {
+Promise.prototype.enqueueOrExecuteHandler = function(onFulfilled, onRejected) {
   if (this.status === Status.PENDING) {
     this.handlers.push({
       onFulfilled: onFulfilled,
